@@ -1,0 +1,82 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<div class="container">
+  <div class="row">
+      <div class="col">
+        <ul class="list-group" data-bind="foreach: persons">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm">
+                  <span data-bind="text: name, visible: id != $parent.editPersonId()"></span>
+                  <input type="text" class="form-control" data-bind="value: $parent.editPersonName, visible: id == $parent.editPersonId()">
+                </div>
+                <div class="col-sm">
+                  <span data-bind="text: readableDate(birthDay), visible: id != $parent.editPersonId()"></span>
+                  <input type="date" class="form-control" id="inputNewDate"  data-bind="value: $parent.editPersonBirthDay, visible: id == $parent.editPersonId()">
+                </div>
+                <div class="col-sm">
+                  <button type="button" class="btn btn-primary" data-bind="click: $parent.showPhones, visible: id != $parent.showPhonesId()">Phones</button>
+                  <button type="button" class="btn btn-warning" data-bind="click: $parent.editPerson, visible: id != $parent.editPersonId()">Edit</button>
+                  <button type="button" class="btn btn-success"  data-bind="click: $parent.updatePerson, visible: id == $parent.editPersonId()">Update</button>
+                  <button type="button" class="btn btn-warning" data-bind="click: $parent.cancelEditPerson, visible: id == $parent.editPersonId()"">Cancel</button>
+                  <button type="button" class="btn btn-danger" data-bind="click: $parent.deletePerson">Delete</button>
+                </div>
+              </div>              
+              <div class="row" data-bind="visible: id == $parent.showPhonesId()">
+                <ul class="list-group" data-bind="foreach: $parent.phones">
+                  <li class="list-group-item">
+                    <span data-bind="text: number"></span>
+                    <div class="float-right" style="margin-left:10px;">
+                      <button type="button" class="btn btn-danger btn-sm" data-bind="click: $root.deletePhone">Delete</button>
+                    </div>
+                  </li>                    
+                </ul>
+              </div>
+              <div class="row" data-bind="visible: id == $parent.showPhonesId()">
+                <form data-bind="submit: $root.addPhone" style="margin-top:5px;">
+                  <div class="form-row align-items-center">
+                    <div class="col-auto">
+                      <input type="text" class="form-control" data-bind="value: $root.newPhone" placeholder="New person's phone">
+                    </div>
+                    <div class="col-auto">
+                      <button type="submit" class="btn btn-primary">Add phone</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="row" data-bind="visible: id == $root.showPhonesId() && $root.newPhoneError" style="margin-top:5px;">
+                <div class="alert alert-danger" role="alert">Wrong or empty phone number</div>
+              </div>
+            </div>
+          </li>  
+        </ul>
+      </div>
+  </div>
+    <div class="row">
+      <div class="col">
+        <form data-bind="submit: addPerson" style="margin-top:10px;">
+          <div class="form-row align-items-center">
+            <div class="col-auto">
+              <label class="sr-only" for="inputNewName">Name</label>
+              <input type="text" class="form-control" data-bind="value: newPersonName" placeholder="New person's name">
+            </div>
+            <div class="col-auto">
+              <label class="sr-only" for="inlineFormInputGroup">Birthdate</label>
+              <input type="date" class="form-control" data-bind="value: newPersonBirthDay">
+            </div>     
+            <div class="col-auto">
+              <button type="submit" class="btn btn-primary">Add person</button>
+            </div>
+          </div>
+        </form>
+      </div>
+  </div>
+  <div class="row" data-bind="visible: $root.newPersonError" style="margin-top:5px;">
+    <div class="alert alert-danger" role="alert">Empty person name</div>
+  </div>
+</div>
+
